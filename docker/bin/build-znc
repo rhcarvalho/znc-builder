@@ -16,3 +16,7 @@ if [ -n "${PREFIX-}" ]; then
 fi
 
 make install
+
+# Copy required shared libraries just in case they are not available in the
+# target host.
+cp $(ldd "${PREFIX}/bin/znc" | grep -o '/[^ ]*') "${PREFIX}/share"
