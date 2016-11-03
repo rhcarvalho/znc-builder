@@ -1,0 +1,27 @@
+#!/bin/bash
+
+set -o errexit
+set -o nounset
+set -o pipefail
+
+ZNC_URL='http://znc.in/releases/znc-1.6.3.tar.gz'
+
+EXTRA_REPOS=(
+  'https://dl.fedoraproject.org/pub/epel/epel-release-latest-6.noarch.rpm'
+  'centos-release-scl'
+  'http://rpms.famillecollet.com/enterprise/6/remi/x86_64/remi-release-6.8-1.el6.remi.noarch.rpm'
+)
+
+yum install -y "${EXTRA_REPOS[@]}"
+
+yum install -y yum-utils
+yum-builddep -y znc
+
+yum install -y --enablerepo=remi devtoolset-3-gcc-c++ libicu-last-devel
+
+yum clean all
+
+mkdir -p /src
+cd /src
+curl -O "${ZNC_URL}"
+tar -xzvf znc-*.tar.gz

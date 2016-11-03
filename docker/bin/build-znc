@@ -1,0 +1,18 @@
+#!/bin/bash
+
+source scl_source enable devtoolset-3
+
+set -o errexit
+set -o nounset
+set -o pipefail
+
+cd /src/znc-*
+
+./configure --prefix="${PREFIX-}"
+make
+
+if [ -n "${PREFIX-}" ]; then
+  mkdir -p "${PREFIX}/bin"
+fi
+
+make install
